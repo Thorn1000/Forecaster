@@ -42,7 +42,7 @@ headers = {
 ninety_days_ago = datetime.now() - timedelta(days=90)
 
 epoch_time = int(time.mktime(ninety_days_ago.timetuple()))
-days_list = [7, 30, 60, 90]
+days_list = [7, 30, 60, 90, 120, 180, 270, 365]
 counter = 1
 percent_beat_dict = {}
 names = []
@@ -53,8 +53,7 @@ while loopy:
     stat = input("Enter what stat ID do you want to forecast for: ")
     url = f"https://www.nationstates.net/cgi-bin/api.cgi?q=censusname;scale={stat}"
     info = api_calls(url)
-    info = info.strip('<WORLD>\n<CENSUS id="').strip(str(stat)).strip('">').strip('</CENSUS>\n</WORLD>')
-
+    info = info.strip('<WORLD>\n<CENSUS id="').strip(str(stat)).strip('">').strip('</CENSUS>\n')
     skip = input("Is " + info + " the stat you want to forecast y/n\n")
     if skip == 'y':
         loopy = False
@@ -118,7 +117,7 @@ for name in names:
     else:
         result_array.append((None, None))
 
-print()
+print(f"\nProjections for {info}:")
 for days in days_list:
     percent_beat_dict[days] = calculate_percent_beat(days, you, result_array)
     print(f"Percent beat after {days} days: {percent_beat_dict[days]:.2f}%")
